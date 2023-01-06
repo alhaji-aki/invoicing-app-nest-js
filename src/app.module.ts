@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import databaseConfig from './config/database.config';
+import { ValidatorModule } from './common/validators/validator.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import databaseConfig from './config/database.config';
         synchronize: configService.get('app.environment') == 'development',
       }),
     }),
+    ValidatorModule,
   ],
 })
 export class AppModule {}
