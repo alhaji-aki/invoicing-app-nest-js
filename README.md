@@ -40,6 +40,12 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 [ ] user can accept a pending invite that is not expired or revoked
 
+[ ] admin user can view all users
+
+[ ] admin user can view all invites
+
+[ ] user can see all their companies (sender and recipient)
+
 ### Model/DB Structure
 
 User - name, email {unique}, password, is_admin
