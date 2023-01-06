@@ -1,11 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationError, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
-import {
-  ValidationException,
-  ValidationExceptionFilter,
-} from './common/validators/validation.filter';
+import { ValidationExceptionFilter } from './common/validators/validation.filter';
+import validationConfig from './config/validation.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,23 +12,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new ValidationExceptionFilter());
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
-      exceptionFactory: (errors: ValidationError[]) => {
-        const errMsg = {};
-        errors.forEach((err) => {
-          errMsg[err.property] = [...Object.values(err.constraints)];
-        });
-        return new ValidationException(errMsg);
-      },
-    }),
-  );
+  app.useGlobalPipes(new ValidationPipe(validationConfig));
 
   await app.listen(3000);
 }

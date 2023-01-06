@@ -10,7 +10,7 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 [ ] A user should be able to login, reset password, change password, update profile
 
-[ ] A user can has companies that sends invoices and ones that receive invoices.
+[ ] A user can have companies that sends invoices and ones that receive invoices.
 
 [ ] A user can get all their invoices
 
@@ -20,7 +20,7 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 [ ] A user can send an invoice
 
-[ ] The email is sent to th contact email and if there are any carbon copy emails they will be copied
+[ ] The email is sent to the contact email and if there are any carbon copy emails they will be copied
 
 [ ] A user can generate invoice pdf
 
@@ -50,9 +50,9 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 User - name, email {unique}, password, is_admin
 
-Company (Sender) - name, email, phone, address, tax number, checks_payable to (name) - belongs to user
+Company (Sender) - id, uuid, name, email, phone, address, tax number, checks_payable to (name) - belongs to user
 
-Company (Recipient) - name, address, country, city, zip code, contact email, carbon copy emails - belongs to user
+Company (Recipient) - id, uuid, name, address, country, city, zip code, contact email, carbon copy emails - belongs to user
 
 Invoice - invoice number, user, sending company, receiving company, invoice amount, paid_at, timestamps
 

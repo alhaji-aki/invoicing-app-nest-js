@@ -6,7 +6,7 @@ import {
   registerDecorator,
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, Not } from 'typeorm';
 
 @ValidatorConstraint({ name: 'unique', async: true })
 @Injectable()
@@ -14,11 +14,18 @@ export class UniqueValidator implements ValidatorConstraintInterface {
   constructor(private readonly dataSource: DataSource) {}
 
   async validate(value: string, args: ValidationArguments) {
-    const [entity, field = args.property] = args.constraints;
+    if (!value) return false;
 
-    return await this.dataSource
-      .getRepository(entity)
-      .exist({ where: { [field]: value } });
+    const [entity, field = args.property, ignore = null] = args.constraints;
+
+    const where =
+      ignore && args.object[ignore]
+        ? { [field]: value, uuid: Not(args.object[ignore]) }
+        : { [field]: value };
+
+    const result = await this.dataSource.getRepository(entity).exist({ where });
+
+    return !result;
   }
 
   defaultMessage(args: ValidationArguments) {
@@ -31,10 +38,12 @@ export class UniqueValidator implements ValidatorConstraintInterface {
 }
 
 export function IsUnique(
+  // eslint-disable-next-line @typescript-eslint/ban-types
   entity: Function,
   field?: string,
+  ignore?: string,
   validationOptions?: ValidationOptions,
-) {
+): (object: any, propertyName: string) => void {
   return function (object: any, propertyName: string) {
     registerDecorator({
       name: 'unique',
@@ -42,7 +51,7 @@ export function IsUnique(
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
-      constraints: [entity, field],
+      constraints: [entity, field, ignore],
       validator: UniqueValidator,
     });
   };

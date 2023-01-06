@@ -2,12 +2,10 @@ import {
   ExceptionFilter,
   Catch,
   ArgumentsHost,
-  HttpException,
   BadRequestException,
-  HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
 export class ValidationException extends BadRequestException {
   constructor(public validationErrors: any) {
