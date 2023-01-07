@@ -13,8 +13,8 @@ import { SenderService } from '../services/sender.service';
 import { CreateSenderDto } from '../dtos/create-sender.dto';
 import { UpdateSenderDto } from '../dtos/update-sender.dto';
 import { Response } from 'express';
-import { ParamBody } from 'src/common/decorators/param-body.decorator';
-import validationConfig from 'src/config/validation.config';
+import { ParamBody } from '../../common/decorators/param-body.decorator';
+import validationConfig from '../../config/validation.config';
 
 @Controller('companies/senders')
 export class SenderController {

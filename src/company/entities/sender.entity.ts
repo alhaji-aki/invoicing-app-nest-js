@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Invoice } from '../../invoice/entities/invoice.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,6 +9,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
   Generated,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('company_senders')
@@ -37,6 +39,9 @@ export class Sender {
 
   @Column({ name: 'checks_payable_to', nullable: true })
   checksPayableTo: string;
+
+  @OneToMany(() => Invoice, (invoice) => invoice.sender)
+  invoices: Invoice[];
 
   @CreateDateColumn({
     type: 'timestamp',

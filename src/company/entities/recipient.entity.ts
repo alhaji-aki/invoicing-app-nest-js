@@ -1,3 +1,4 @@
+import { Invoice } from '../../invoice/entities/invoice.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Generated,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('company_recipients')
@@ -36,6 +38,9 @@ export class Recipient {
 
   @Column({ name: 'cc_emails', type: 'json' })
   ccEmails: Record<string, any>;
+
+  @OneToMany(() => Invoice, (invoice) => invoice.recipient)
+  invoices: Invoice[];
 
   @CreateDateColumn({
     type: 'timestamp',

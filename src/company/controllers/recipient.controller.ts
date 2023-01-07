@@ -13,8 +13,8 @@ import { RecipientService } from '../services/recipient.service';
 import { CreateRecipientDto } from '../dtos/create-recipient.dto';
 import { UpdateRecipientDto } from '../dtos/update-recipient.dto';
 import { Response } from 'express';
-import { ParamBody } from 'src/common/decorators/param-body.decorator';
-import validationConfig from 'src/config/validation.config';
+import { ParamBody } from '../../common/decorators/param-body.decorator';
+import validationConfig from '../../config/validation.config';
 
 @Controller('companies/recipients')
 export class RecipientController {
