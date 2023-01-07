@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompanyModule } from './company/company.module';
 import databaseConfig from './config/database.config';
 import { ValidatorModule } from './common/validators/validator.module';
+import { InvoiceModule } from './invoice/invoice.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ValidatorModule } from './common/validators/validator.module';
     }),
     CompanyModule,
     ValidatorModule,
+    InvoiceModule,
   ],
 })
 export class AppModule {}
