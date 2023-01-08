@@ -8,9 +8,9 @@ import {
   Param,
   Res,
 } from '@nestjs/common';
-import { InvoiceService } from './invoice.service';
-import { CreateInvoiceDto } from './dto/create-invoice.dto';
-import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { InvoiceService } from '../services/invoice.service';
+import { CreateInvoiceDto } from '../dto/create-invoice.dto';
+import { UpdateInvoiceDto } from '../dto/update-invoice.dto';
 import { Response } from 'express';
 
 @Controller('invoices')

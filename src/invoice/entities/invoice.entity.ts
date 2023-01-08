@@ -10,7 +10,9 @@ import {
   Generated,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
+import { InvoiceLine } from './invoice-line.entity';
 
 @Entity('invoices')
 export class Invoice {
@@ -38,6 +40,9 @@ export class Invoice {
   })
   @JoinColumn({ name: 'recipient_id' })
   recipient: Recipient;
+
+  @OneToMany(() => InvoiceLine, (invoiceLine) => invoiceLine.invoice)
+  invoiceLines: InvoiceLine[];
 
   @Column({ type: 'bigint', unsigned: true, default: 0 })
   amount: number;
