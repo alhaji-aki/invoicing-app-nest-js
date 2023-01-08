@@ -27,6 +27,12 @@ export class Invoice {
   @Column({ unique: true, name: 'invoice_no' })
   invoiceNo: string;
 
+  @Column()
+  title: string;
+
+  @Column()
+  description: string;
+
   @Column({ name: 'sender_id', nullable: true })
   senderId: number;
 

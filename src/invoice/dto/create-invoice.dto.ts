@@ -4,6 +4,7 @@ import {
   ValidateNested,
   ArrayMinSize,
   IsArray,
+  MaxLength,
 } from 'class-validator';
 import { IsExists } from '../../common/validators/exists.validator';
 import { Sender } from '../../company/entities/sender.entity';
@@ -12,6 +13,14 @@ import { CreateInvoiceLineDto } from './create-invoice-line.dto';
 import { Type } from 'class-transformer';
 
 export class CreateInvoiceDto {
+  @IsNotEmpty()
+  @MaxLength(255)
+  title: string;
+
+  @IsNotEmpty()
+  @MaxLength(255)
+  description: string;
+
   @IsNotEmpty()
   @IsUUID('4')
   @IsExists(Sender, 'uuid')
