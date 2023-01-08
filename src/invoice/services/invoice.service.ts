@@ -71,9 +71,8 @@ export class InvoiceService {
 
       return { ...invoice, invoiceLines };
     } catch (error) {
-      console.error(error);
-
       await queryRunner.rollbackTransaction();
+      throw error;
     } finally {
       await queryRunner.release();
     }

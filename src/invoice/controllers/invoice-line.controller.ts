@@ -12,7 +12,7 @@ import { CreateInvoiceLineDto } from '../dto/create-invoice-line.dto';
 import { InvoiceLineService } from '../services/invoice-line.service';
 import { UpdateInvoiceLineDto } from '../dto/update-invoice-line.dto';
 
-@Controller('invoices/:invoice')
+@Controller('invoices/:invoice/invoice-lines')
 export class InvoiceLineController {
   constructor(private readonly invoiceLineService: InvoiceLineService) {}
 

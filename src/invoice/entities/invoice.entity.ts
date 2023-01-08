@@ -17,7 +17,6 @@ import { InvoiceLine } from './invoice-line.entity';
 @Entity('invoices')
 export class Invoice {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  @Exclude()
   id: number;
 
   @Column({ unique: true })
@@ -27,12 +26,18 @@ export class Invoice {
   @Column({ unique: true, name: 'invoice_no' })
   invoiceNo: string;
 
+  @Column({ name: 'sender_id', nullable: true })
+  senderId: number;
+
   @ManyToOne(() => Sender, (sender) => sender.invoices, {
     nullable: true,
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'sender_id' })
   sender: Sender;
+
+  @Column({ name: 'recipient_id', nullable: true })
+  recipientId: number;
 
   @ManyToOne(() => Recipient, (recipient) => recipient.invoices, {
     nullable: true,
@@ -64,8 +69,4 @@ export class Invoice {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
-
-  constructor(partial?: Partial<Invoice>) {
-    Object.assign(this, partial);
-  }
 }
