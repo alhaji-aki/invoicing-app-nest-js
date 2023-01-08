@@ -26,6 +26,10 @@ export class CreateRecipientDto {
 
   @IsNotEmpty()
   @MaxLength(255)
+  contactName: string;
+
+  @IsNotEmpty()
+  @MaxLength(255)
   @IsEmail()
   contactEmail: string;
 

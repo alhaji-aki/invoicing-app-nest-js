@@ -33,11 +33,14 @@ export class Recipient {
   @Column({ name: 'zip_code' })
   zipCode: string;
 
+  @Column({ name: 'contact_name' })
+  contactName: string;
+
   @Column({ name: 'contact_email' })
   contactEmail: string;
 
   @Column({ name: 'cc_emails', type: 'json' })
-  ccEmails: Record<string, any>;
+  ccEmails: string[];
 
   @OneToMany(() => Invoice, (invoice) => invoice.recipient)
   invoices: Invoice[];
