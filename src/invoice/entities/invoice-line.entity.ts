@@ -14,6 +14,7 @@ import { Invoice } from './invoice.entity';
 @Entity('invoice_lines')
 export class InvoiceLine {
   @PrimaryGeneratedColumn({ type: 'bigint' })
+  @Exclude()
   id: number;
 
   @Column({ unique: true })
