@@ -4,5 +4,9 @@
   "sourceRoot": "src",
   "generateOptions": {
     "flat": true
+  },
+  "compilerOptions": {
+    "assets": ["**/mail/**/*hbs"],
+    "watchAssets": true
   }
 }

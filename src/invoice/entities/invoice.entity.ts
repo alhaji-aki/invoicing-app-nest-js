@@ -13,6 +13,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { InvoiceLine } from './invoice-line.entity';
+import { SentStatus } from '../enum/sent-status.enum';
 
 @Entity('invoices')
 export class Invoice {
@@ -61,6 +62,9 @@ export class Invoice {
 
   @Column({ name: 'paid_at', type: 'timestamp', nullable: true })
   paidAt: Date;
+
+  @Column({ name: 'sent_status', default: SentStatus.NONE })
+  sentStatus: string;
 
   @CreateDateColumn({
     type: 'timestamp',

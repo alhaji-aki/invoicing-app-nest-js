@@ -8,12 +8,22 @@ import { Sender } from '../company/entities/sender.entity';
 import { InvoiceLine } from './entities/invoice-line.entity';
 import { InvoiceLineService } from './services/invoice-line.service';
 import { InvoiceLineController } from './controllers/invoice-line.controller';
+import { SendInvoiceController } from './controllers/send-invoice.controller';
+import { BullModule } from '@nestjs/bull';
+import { SendInvoiceConsumer } from './consumers/send-invoice.consumer';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Invoice, Recipient, Sender, InvoiceLine]),
+    BullModule.registerQueue({
+      name: 'invoices',
+    }),
   ],
-  controllers: [InvoiceController, InvoiceLineController],
-  providers: [InvoiceService, InvoiceLineService],
+  controllers: [
+    InvoiceController,
+    InvoiceLineController,
+    SendInvoiceController,
+  ],
+  providers: [InvoiceService, InvoiceLineService, SendInvoiceConsumer],
 })
 export class InvoiceModule {}

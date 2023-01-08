@@ -12,6 +12,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { randomInt } from 'crypto';
 import { InvoiceLine } from '../entities/invoice-line.entity';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Injectable()
 export class InvoiceService {
@@ -23,6 +25,7 @@ export class InvoiceService {
     @InjectRepository(Recipient)
     private readonly recipientRepository: Repository<Recipient>,
     private readonly dataSource: DataSource,
+    @InjectQueue('invoices') private readonly queue: Queue,
   ) {}
 
   async index() {
@@ -134,6 +137,20 @@ export class InvoiceService {
     }
 
     return await this.invoiceRepository.remove(invoiceEntity);
+  }
+
+  async send(invoice: string) {
+    const invoiceEntity = await this.invoiceRepository.findOne({
+      where: { uuid: invoice },
+    });
+
+    if (!invoiceEntity) {
+      throw new NotFoundException('Invoice not found.');
+    }
+
+    await this.queue.add('send-invoice-job', {
+      invoice: invoiceEntity.id,
+    });
   }
 
   private async generateInvoiceNo(): Promise<string> {
