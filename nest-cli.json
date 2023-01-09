@@ -6,7 +6,7 @@
     "flat": true
   },
   "compilerOptions": {
-    "assets": ["**/mail/**/*hbs"],
+    "assets": ["**/templates/**/*hbs"],
     "watchAssets": true
   }
 }
