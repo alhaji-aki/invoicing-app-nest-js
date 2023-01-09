@@ -1,9 +1,10 @@
 import * as dotenv from 'dotenv';
-import { DataSource } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { SeederOptions } from 'typeorm-extension';
 
 dotenv.config();
 
-export const dataSource = new DataSource({
+const options: DataSourceOptions & SeederOptions = {
   name: 'default',
   type: 'mysql',
   host: process.env.DB_HOST,
@@ -14,4 +15,8 @@ export const dataSource = new DataSource({
   synchronize: false,
   entities: ['dist/**/*.entity.js'],
   migrations: ['dist/src/db/migrations/*.js'],
-});
+  seeds: ['dist/src/db/seeders/*.js'],
+  factories: ['dist/src/db/factories/*.js'],
+};
+
+export const dataSource = new DataSource(options);

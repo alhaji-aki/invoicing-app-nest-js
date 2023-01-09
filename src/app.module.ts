@@ -12,6 +12,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import mailConfig from './config/mail.config';
 import { join } from 'path';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { join } from 'path';
     ValidatorModule,
     CompanyModule,
     InvoiceModule,
+    UserModule,
   ],
 })
 export class AppModule {}
