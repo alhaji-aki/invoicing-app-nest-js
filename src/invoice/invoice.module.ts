@@ -8,7 +8,7 @@ import { Sender } from '../company/entities/sender.entity';
 import { InvoiceLine } from './entities/invoice-line.entity';
 import { InvoiceLineService } from './services/invoice-line.service';
 import { InvoiceLineController } from './controllers/invoice-line.controller';
-import { SendInvoiceController } from './controllers/send-invoice.controller';
+import { InvoiceActionsController } from './controllers/invoice-actions.controller';
 import { BullModule } from '@nestjs/bull';
 import { SendInvoiceConsumer } from './consumers/send-invoice.consumer';
 
@@ -22,7 +22,7 @@ import { SendInvoiceConsumer } from './consumers/send-invoice.consumer';
   controllers: [
     InvoiceController,
     InvoiceLineController,
-    SendInvoiceController,
+    InvoiceActionsController,
   ],
   providers: [InvoiceService, InvoiceLineService, SendInvoiceConsumer],
 })

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { randomInt } from 'crypto';
 import { InvoiceLine } from '../entities/invoice-line.entity';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import { MarkAsPaidDto } from '../dto/mark-as-paid.dto';
 
 @Injectable()
 export class InvoiceService {
@@ -151,6 +153,24 @@ export class InvoiceService {
     await this.queue.add('send-invoice-job', {
       invoice: invoiceEntity.id,
     });
+  }
+
+  async markAsPaid(invoice: string, markAsPaidDto: MarkAsPaidDto) {
+    const invoiceEntity = await this.invoiceRepository.findOne({
+      where: { uuid: invoice },
+    });
+
+    if (!invoiceEntity) {
+      throw new NotFoundException('Invoice not found.');
+    }
+
+    if (invoiceEntity.paidAt) {
+      throw new ForbiddenException('Invoice is already paid for.');
+    }
+
+    invoiceEntity.paidAt = markAsPaidDto.paidAt || new Date();
+
+    return await this.invoiceRepository.save(invoiceEntity);
   }
 
   private async generateInvoiceNo(): Promise<string> {
