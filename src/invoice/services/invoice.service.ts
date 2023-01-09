@@ -79,7 +79,7 @@ export class InvoiceService {
 
       await queryRunner.commitTransaction();
 
-      return { ...invoice, invoiceLines };
+      return new Invoice({ ...invoice, invoiceLines });
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
@@ -194,7 +194,7 @@ export class InvoiceService {
   }
 
   async generatePDF(invoice: Invoice) {
-    const templatePath = join(__dirname, '../templates/pdf.hbs');
+    const templatePath = join(__dirname, '../../templates/invoice/pdf.hbs');
     const htmlContents = readFileSync(templatePath, { encoding: 'utf-8' });
     Handlebars.registerHelper('formatDate', (context, block) =>
       moment(context).format(block),

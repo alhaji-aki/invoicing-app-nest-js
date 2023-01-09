@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Invoice } from '../../invoice/entities/invoice.entity';
 import {
   Entity,
@@ -12,6 +13,7 @@ import {
 @Entity('company_recipients')
 export class Recipient {
   @PrimaryGeneratedColumn({ type: 'bigint' })
+  @Exclude()
   id: number;
 
   @Column({ unique: true })
@@ -59,4 +61,8 @@ export class Recipient {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
+
+  constructor(partial?: Partial<Recipient>) {
+    Object.assign(this, partial);
+  }
 }

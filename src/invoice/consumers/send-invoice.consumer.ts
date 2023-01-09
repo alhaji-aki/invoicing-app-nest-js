@@ -43,7 +43,7 @@ export class SendInvoiceConsumer {
         to: invoice.recipient.contactEmail,
         cc: invoice.recipient.ccEmails,
         subject: invoice.title,
-        template: './invoice/templates/email',
+        template: './templates/invoice/email',
         context: {
           name: invoice.recipient.contactName,
           title: invoice.title,

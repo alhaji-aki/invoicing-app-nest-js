@@ -8,21 +8,22 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
-import { Response } from 'express';
+
 import { InvoiceService } from '../services/invoice.service';
 import { MarkAsPaidDto } from '../dto/mark-as-paid.dto';
+import { Response } from 'express';
 
 @Controller('invoices/:invoice')
 export class InvoiceActionsController {
   constructor(private readonly invoiceService: InvoiceService) {}
 
   @Get('send')
-  async send(@Param('invoice') invoice: string, @Res() res: Response) {
+  async send(@Param('invoice') invoice: string) {
     await this.invoiceService.send(invoice);
 
-    return res.json({
+    return {
       message: 'Sending invoice... We will notify you if it is successful...',
-    });
+    };
   }
 
   @Get('download-pdf')
@@ -43,12 +44,11 @@ export class InvoiceActionsController {
   async markAsPaid(
     @Param('invoice') invoice: string,
     @Body() markAsPaidDto: MarkAsPaidDto,
-    @Res() res: Response,
   ) {
     await this.invoiceService.markAsPaid(invoice, markAsPaidDto);
 
-    return res.json({
+    return {
       message: 'Invoice marked as paid successfully...',
-    });
+    };
   }
 }

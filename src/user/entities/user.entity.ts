@@ -45,4 +45,8 @@ export class User {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
+
+  constructor(partial?: Partial<User>) {
+    Object.assign(this, partial);
+  }
 }

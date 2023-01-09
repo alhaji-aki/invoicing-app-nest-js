@@ -6,13 +6,11 @@ import {
   Post,
   Body,
   Param,
-  Res,
   ValidationPipe,
 } from '@nestjs/common';
 import { SenderService } from '../services/sender.service';
 import { CreateSenderDto } from '../dtos/create-sender.dto';
 import { UpdateSenderDto } from '../dtos/update-sender.dto';
-import { Response } from 'express';
 import { ParamBody } from '../../common/decorators/param-body.decorator';
 import validationConfig from '../../config/validation.config';
 
@@ -21,27 +19,27 @@ export class SenderController {
   constructor(private readonly senderService: SenderService) {}
 
   @Get()
-  async index(@Res() res: Response) {
-    return res.json({
+  async index() {
+    return {
       message: 'Get senders.',
       data: await this.senderService.index(),
-    });
+    };
   }
 
   @Post()
-  async store(@Body() createSenderDto: CreateSenderDto, @Res() res: Response) {
-    return res.json({
+  async store(@Body() createSenderDto: CreateSenderDto) {
+    return {
       message: 'Sender created successfully.',
       data: await this.senderService.store(createSenderDto),
-    });
+    };
   }
 
   @Get(':sender')
-  async show(@Param('sender') sender: string, @Res() res: Response) {
-    return res.json({
+  async show(@Param('sender') sender: string) {
+    return {
       message: 'Get sender.',
       data: await this.senderService.show(sender),
-    });
+    };
   }
 
   @Patch(':sender')
@@ -54,19 +52,18 @@ export class SenderController {
       }),
     )
     updateSenderDto: UpdateSenderDto,
-    @Res() res: Response,
   ) {
-    return res.json({
+    return {
       message: 'Sender updated successfully.',
       data: await this.senderService.update(sender, updateSenderDto),
-    });
+    };
   }
 
   @Delete(':sender')
-  async delete(@Param('sender') sender: string, @Res() res: Response) {
-    return res.json({
+  async delete(@Param('sender') sender: string) {
+    return {
       message: 'Sender deleted successfully.',
       data: await this.senderService.delete(sender),
-    });
+    };
   }
 }

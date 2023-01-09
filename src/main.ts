@@ -1,6 +1,6 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 import { ValidationExceptionFilter } from './common/validators/validation.filter';
 import validationConfig from './config/validation.config';
@@ -13,6 +13,8 @@ async function bootstrap() {
   app.useGlobalFilters(new ValidationExceptionFilter());
 
   app.useGlobalPipes(new ValidationPipe(validationConfig));
+
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   await app.listen(3000);
 }

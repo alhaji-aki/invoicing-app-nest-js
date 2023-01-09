@@ -34,6 +34,7 @@ export class Invoice {
   description: string;
 
   @Column({ name: 'sender_id', nullable: true })
+  @Exclude()
   senderId: number;
 
   @ManyToOne(() => Sender, (sender) => sender.invoices, {
@@ -44,6 +45,7 @@ export class Invoice {
   sender: Sender;
 
   @Column({ name: 'recipient_id', nullable: true })
+  @Exclude()
   recipientId: number;
 
   @ManyToOne(() => Recipient, (recipient) => recipient.invoices, {
@@ -79,4 +81,8 @@ export class Invoice {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
+
+  constructor(partial?: Partial<Invoice>) {
+    Object.assign(this, partial);
+  }
 }

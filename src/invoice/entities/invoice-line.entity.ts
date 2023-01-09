@@ -28,6 +28,7 @@ export class InvoiceLine {
   amount: number;
 
   @Column({ name: 'invoice_id' })
+  @Exclude()
   invoiceId: number;
 
   @ManyToOne(() => Invoice, (invoice) => invoice.invoiceLines, {
@@ -50,4 +51,8 @@ export class InvoiceLine {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
+
+  constructor(partial?: Partial<InvoiceLine>) {
+    Object.assign(this, partial);
+  }
 }

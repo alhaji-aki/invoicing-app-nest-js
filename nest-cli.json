@@ -6,7 +6,7 @@
     "flat": true
   },
   "compilerOptions": {
-    "assets": ["**/templates/**/*"],
+    "assets": [{ "include": "**/templates/**/*.hbs", "outDir": "dist/src" }],
     "watchAssets": true
   }
 }
