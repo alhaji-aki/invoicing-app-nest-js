@@ -6,6 +6,7 @@ import { Invoice } from '../entities/invoice.entity';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { SentStatus } from '../enum/sent-status.enum';
+import { InvoiceService } from '../services/invoice.service';
 
 @Processor('invoices')
 export class SendInvoiceConsumer {
@@ -13,6 +14,7 @@ export class SendInvoiceConsumer {
     private readonly mailerService: MailerService,
     @InjectRepository(Invoice)
     private readonly invoiceRepository: Repository<Invoice>,
+    private readonly invoiceService: InvoiceService,
   ) {}
 
   @Process('send-invoice-job')
@@ -34,7 +36,9 @@ export class SendInvoiceConsumer {
       invoice.sentStatus = SentStatus.SENDING;
       await this.invoiceRepository.save(invoice);
 
-      // TODO: generate invoice pdf and add it to the email
+      // generate invoice pdf and add it to the email
+      const pdf = await this.invoiceService.generatePDF(invoice);
+
       await this.mailerService.sendMail({
         to: invoice.recipient.contactEmail,
         cc: invoice.recipient.ccEmails,
@@ -47,6 +51,14 @@ export class SendInvoiceConsumer {
           sender: invoice.recipient.name,
           user: 'User', // TODO: replace this with the user's name
         },
+        attachments: [
+          {
+            filename: `invoice-${invoice.createdAt}.pdf`,
+            content: pdf,
+            contentType: 'application/pdf',
+            contentDisposition: 'attachment',
+          },
+        ],
       });
 
       invoice.sentStatus = SentStatus.SENT;

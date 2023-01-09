@@ -16,6 +16,11 @@ import { InvoiceLine } from '../entities/invoice-line.entity';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { MarkAsPaidDto } from '../dto/mark-as-paid.dto';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import puppeteer from 'puppeteer';
+import * as Handlebars from 'handlebars';
+import * as moment from 'moment';
 
 @Injectable()
 export class InvoiceService {
@@ -171,6 +176,53 @@ export class InvoiceService {
     invoiceEntity.paidAt = markAsPaidDto.paidAt || new Date();
 
     return await this.invoiceRepository.save(invoiceEntity);
+  }
+
+  async downloadPDF(invoice: string) {
+    const invoiceEntity = await this.invoiceRepository.findOne({
+      where: { uuid: invoice },
+      relations: ['sender', 'recipient', 'invoiceLines'],
+    });
+
+    if (!invoiceEntity) {
+      throw new NotFoundException('Invoice not found.');
+    }
+
+    const buffer = await this.generatePDF(invoiceEntity);
+
+    return { invoice: invoiceEntity, buffer };
+  }
+
+  async generatePDF(invoice: Invoice) {
+    const templatePath = join(__dirname, '../templates/pdf.hbs');
+    const htmlContents = readFileSync(templatePath, { encoding: 'utf-8' });
+    Handlebars.registerHelper('formatDate', (context, block) =>
+      moment(context).format(block),
+    );
+    Handlebars.registerHelper('iteration', (context) => context + 1);
+
+    const template = Handlebars.compile(htmlContents);
+
+    const content = template({ invoice });
+
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.setContent(content);
+
+    const buffer = await page.pdf({
+      format: 'A4',
+      printBackground: false,
+      margin: {
+        left: '0px',
+        top: '0px',
+        right: '0px',
+        bottom: '0px',
+      },
+    });
+
+    await browser.close();
+
+    return buffer;
   }
 
   private async generateInvoiceNo(): Promise<string> {

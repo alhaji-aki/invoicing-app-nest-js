@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+
+        <!-- External CSS libraries -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <!-- Google fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+            rel="stylesheet">
+
+        <!-- Custom Stylesheet -->
+        <style>
+            .table {
+                color: #535353;
+            }
+
+            .invoice-content {
+                font-family: 'Poppins', sans-serif;
+                color: #535353;
+                font-size: 14px;
+            }
+
+            .invoice-content a {
+                text-decoration: none;
+            }
+
+            .invoice-content .img-fluid {
+                max-width: 100% !important;
+                height: auto;
+            }
+
+            .invoice-content .form-control:focus {
+                box-shadow: none;
+            }
+
+            .invoice-content h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            .h1,
+            .h2,
+            .h3,
+            .h4,
+            .h5,
+            .h6 {
+                font-family: 'Poppins', sans-serif;
+                color: #535353;
+            }
+
+            .invoice-content .f-w-600 {
+                font-weight: 600 !important;
+            }
+
+            .invoice-content .text-13 {
+                font-size: 13px;
+            }
+
+            .invoice-content .invoice-table th:first-child,
+            .invoice-content .invoice-table td:first-child {
+                text-align: left;
+            }
+
+            .invoice-content .color-white {
+                color: #fff !important;
+            }
+
+            .invoice-content .inv-header-1 {
+                text-transform: uppercase;
+                font-weight: 700;
+                font-size: 24px;
+                color: #262525;
+            }
+
+            .invoice-content .inv-header-2 {
+                text-transform: uppercase;
+                font-weight: 600;
+                font-size: 20px;
+            }
+
+            .invoice-content .inv-title-1 {
+                font-weight: 500;
+                font-size: 16px;
+            }
+
+            .invoice-content .invo-addr-1 {
+                font-size: 15px;
+                margin-bottom: 20px;
+            }
+
+            .invoice-content .item-desc-1 {
+                text-align: left;
+            }
+
+            .invoice-content .item-desc-1 span {
+                display: block;
+            }
+
+            .invoice-content .item-desc-1 small {
+                display: block;
+            }
+
+            .invoice-content .important-notes-list-1 {
+                font-size: 13px !important;
+                padding-left: 15px;
+                margin-bottom: 15px;
+            }
+
+            .invoice-content .important-notes-list-1 li {
+                margin-bottom: 5px;
+            }
+
+            .invoice-content .bank-transfer-list-1 {
+                font-size: 13px !important;
+                padding-left: 0px;
+            }
+
+            .invoice-content .important-notes {
+                font-size: 12px !important;
+            }
+
+            .invoice-content .invoice-btn-section {
+                text-align: center;
+                margin-top: 30px;
+            }
+
+            table th {
+                font-weight: 500;
+            }
+
+            .invoice-11 {
+                min-height: 100vh;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: #fff6f6;
+                font-family: 'Poppins', sans-serif;
+            }
+
+            .invoice-11 h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            .h1,
+            .h2,
+            .h3,
+            .h4,
+            .h5,
+            .h6 {
+                color: #535353;
+                font-weight: 600;
+            }
+
+            .invoice-11 a {
+                text-decoration: none;
+            }
+
+            .invoice-11 .item-desc-1 small {
+                font-size: 13px;
+                color: #535353;
+            }
+
+            .invoice-11 .invoice-info {
+                background: #fff;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .invoice-11 .invoice-inner {
+                max-width: 1296px;
+                margin: 0 auto;
+            }
+
+            .invoice-11 .copy-right {
+                font-size: 15px;
+                margin-bottom: 0;
+            }
+
+            .invoice-11 .table-responsive {
+                font-size: 15px;
+            }
+
+            .invoice-11 .table {
+                width: 100%;
+                max-width: 100%;
+                margin-bottom: 0;
+                background-color: transparent;
+            }
+
+            .invoice-11 .bg-active {
+                background: #efefef;
+                color: #535353;
+            }
+
+            .invoice-11 .fw-bold {
+                font-weight: 500 !important;
+                color: #535353;
+            }
+
+            .invoice-11 strong {
+                font-weight: 600;
+            }
+
+            .invoice-11 .account-transfer {
+                margin-bottom: 30px;
+                border-bottom: solid 1px #d8d8d8;
+            }
+
+            .invoice-11 .name {
+                font-weight: 600;
+                font-size: 22px;
+                color: #fff;
+            }
+
+            .invoice-11 .invoice-top {
+                position: relative;
+            }
+
+            .invoice-11 .invoice-name {
+                text-align: right;
+                float: right;
+                clip-path: polygon(0 0, 100% 0, 100% 0%, 100% 100%, 20% 100%);
+                position: relative;
+                background: #25cc7e;
+                padding: 70px 70px 75px 120px;
+            }
+
+            .invoice-11 .invoice-name p {
+                margin-bottom: 0;
+                font-size: 15px;
+                color: #fff;
+            }
+
+            .invoice-11 .logo-name h3 {
+                margin-bottom: 15px;
+                font-size: 20px;
+            }
+
+            .invoice-11 .logo-name {
+                position: relative;
+                display: inline-block;
+                width: 100%;
+                padding: 50px 70px;
+            }
+
+            .invoice-11 .logo-name p {
+                font-size: 15px;
+                margin-bottom: 5px;
+            }
+
+            .invoice-11 .logo-name p a {
+                color: #535353;
+                text-decoration: none;
+            }
+
+            .invoice-11 .item-desc-1 span {
+                font-size: 14px;
+                color: #535353;
+                font-weight: 500;
+            }
+
+            .invoice-11 .inv-title-1 {
+                font-weight: 500;
+                font-size: 16px !important;
+            }
+
+            .invoice-11 .invoice-center {
+                border-bottom: solid 1px #d8d8d8;
+                padding: 70px 70px 40px;
+            }
+
+            .invoice-11 .invoice-center p {
+                font-size: 13px;
+                line-height: 25px;
+            }
+
+            .invoice-11 .invoice-center img {
+                border-radius: 100px;
+            }
+
+            .invoice-11 .invoice-center .client-name .user {
+                position: absolute;
+            }
+
+            .invoice-11 .invoice-center .client-name .user img {
+                width: 80px;
+            }
+
+            .invoice-11 .invoice-center .client-name {
+                position: relative;
+                display: inline-block;
+            }
+
+            .invoice-11 .invoice-center .client-name .info p {
+                font-size: 15px;
+                margin-bottom: 5px;
+            }
+
+            .invoice-11 .invoice-center .client-name .info p a {
+                color: #2b2b2b;
+                text-decoration: none;
+            }
+
+            .invoice-11 .table> :not(caption)>*>* {
+                padding: 15px 20px;
+                background-color: var(--bs-table-bg);
+                box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+            }
+
+            .invoice-11 .invoice-top {
+                border-bottom: solid 1px #d8d8d8;
+            }
+
+            .invoice-11 .table-section {
+                padding: 70px 70px;
+                border-bottom: solid 1px #d8d8d8;
+            }
+
+            .invoice-11 .mb-30 {
+                margin-bottom: 30px;
+            }
+
+            .invoice-11 .table .pl0 {
+                padding-left: 0;
+            }
+
+            .invoice-11 .table td.pl0 {
+                padding-left: 0;
+            }
+
+            .invoice-11 .table-striped tbody tr:nth-of-type(odd) {
+                background: none;
+            }
+
+            .invoice-11 .invoice-center.ic2 {
+                border-bottom: none;
+            }
+
+            /** MEDIA **/
+            @media (max-width: 992px) {
+                .invoice-11 .invoice-name {
+                    text-align: right;
+                    float: right;
+                    clip-path: polygon(0 0, 100% 0, 100% 0%, 100% 100%, 7% 100%);
+                    position: relative;
+                    padding: 64px 50px 64px 90px;
+                }
+
+                .invoice-11 .logo-name {
+                    padding: 50px 20px 30px 50px;
+                }
+
+                .invoice-11 .invoice-center {
+                    padding: 50px 50px 20px;
+                }
+
+                .invoice-11 .table-section {
+                    padding: 50px;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .invoice-11 .logo-name {
+                    padding: 30px;
+                }
+
+                .invoice-11 .lorem-hiden {
+                    margin-bottom: 30px;
+                }
+
+                .invoice-11 .invoice-name {
+                    clip-path: polygon(0 0, 100% 0, 100% 0%, 100% 100%, 0% 100%);
+                    padding: 30px;
+                    width: 100%;
+                }
+
+                .invoice-11 .invoice-center .client-name {
+                    margin-bottom: 30px;
+                }
+
+                .invoice-11 .invoice-name {
+                    text-align: left;
+                    float: left;
+                }
+
+                .invoice-11 .invoice-top {
+                    padding: 0;
+                }
+
+                .invoice-11 .invoice-center {
+                    padding: 30px 30px 0;
+                }
+
+                .invoice-11 .table-section {
+                    padding: 30px;
+                }
+            }
+
+            /** Print **/
+            @media print {
+                .col-sm-12 {
+                    width: 100%;
+                }
+
+                .col-sm-11 {
+                    width: 91.66666667%;
+                }
+
+                .col-sm-10 {
+                    width: 83.33333333%;
+                }
+
+                .col-sm-9 {
+                    width: 75%;
+                }
+
+                .col-sm-8 {
+                    width: 66.66666667%;
+                }
+
+                .col-sm-7 {
+                    width: 58.33333333%;
+                }
+
+                .col-sm-6 {
+                    width: 50%;
+                }
+
+                .col-sm-5 {
+                    width: 41.66666667%;
+                }
+
+                .col-sm-4 {
+                    width: 33.33333333%;
+                }
+
+                .col-sm-3 {
+                    width: 25%;
+                }
+
+                .col-sm-2 {
+                    width: 16.66666667%;
+                }
+
+                .col-sm-1 {
+                    width: 8.33333333%;
+                }
+
+                .text-end {
+                    text-align: right !important;
+                }
+
+                .invoice-content .color-white {
+                    color: #262525 !important;
+                }
+
+                .invoice-11 .name {
+                    color: #262525;
+                }
+
+                .invoice-11 .invoice-name p {
+                    color: #535353;
+                }
+
+                .invoice-11 .invoice-name {
+                    background: transparent;
+                }
+
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <!-- Invoice 11 start -->
+        <div class="invoice-11 invoice-content">
+            <div class="invoice-inner" id="invoice_wrapper">
+                <div class="invoice-info">
+                    <div class="invoice-top">
+                        <div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="logo-name">
+                                        <div class="info">
+                                            <h3>{{ invoice.sender.name }}</h3>
+                                            <p><a href="mailto:{{ invoice.sender.email }}">{{ invoice.sender.email }}</a>
+                                            <p class="mb-0"><a href="tel:{{ invoice.sender.phone }}">{{invoice.sender.phone}}</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="invoice-name text-end">
+                                        <h4 class="name color-white inv-header-1">Invoice #{{ invoice.invoiceNo }}</h4>
+                                        <p class="mb-0">Invoice Date: {{formatDate invoice.createdAt "MMMM DD, YYYY"}}<br>{{#if invoice.paymentDueDate}} Payment Due: {{formatDate invoice.paymentDueDate "MMMM DD, YYYY"}} {{/if}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="invoice-center">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="client-name mb-30">
+                                    <div class="info">
+                                        <p class="inv-title-1">Client Information</p>
+                                        <p class="invo-addr-1">
+                                            {{invoice.recipient.name}} <br/>
+                                            {{invoice.recipient.address}} <br/>
+                                            {{invoice.recipient.city}}, {{invoice.recipient.country}} <br/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            {{#if invoice.description}}
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="project-description mb-30 text-end">
+                                    <h5 class="inv-title-1">Project Description</h5>
+                                    <p class="mb-0">{{invoice.description}} </p>
+                                </div>
+                            </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-section clearfix">
+                                <div class="table-responsive">
+                                    <table class="table invoice-table">
+                                        <thead class="bg-active">
+                                            <tr class="tr">
+                                                <th>No.</th>
+                                                <th>Item Description</th>
+                                                <th class="text-end">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each invoice.invoiceLines}}
+                                            <tr class="tr">
+                                                <td>
+                                                    <div class="item-desc-1">
+                                                        <span>{{ iteration @index }}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="pl0">{{ description }}</td>
+                                                <td class="text-end">GHC {{ amount }}</td>
+                                            </tr>
+                                            {{/each}}
+                                            <tr class="tr2">
+                                                <td colspan="2" class="text-end f-w-600">Total</td>
+                                                <td class="f-w-600 text-end">GHC {{ invoice.amount }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="invoice-center ic2">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="lorem mb-30">
+                                    <h3 class="inv-title-1">Important Note</h3>
+                                    <ul class="mb-0 important-notes-list-1">
+                                        <li>Make all cheques payable to {{invoice.sender.checksPayableTo}}</li>
+                                        {{#if invoice.notes}}
+                                        <li>{{invoice.notes}}</li>
+                                        {{/if}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

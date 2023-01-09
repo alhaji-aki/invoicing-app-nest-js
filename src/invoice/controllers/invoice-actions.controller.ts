@@ -25,6 +25,19 @@ export class InvoiceActionsController {
     });
   }
 
+  @Get('download-pdf')
+  async downloadPdf(@Param('invoice') invoice: string, @Res() res: Response) {
+    const results = await this.invoiceService.downloadPDF(invoice);
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="invoice-${results.invoice.createdAt}.pdf"`,
+      'Content-Length': results.buffer.length,
+    });
+
+    res.end(results.buffer);
+  }
+
   @HttpCode(HttpStatus.OK)
   @Post('mark-as-paid')
   async markAsPaid(
