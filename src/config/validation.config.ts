@@ -2,6 +2,7 @@ export default {
   whitelist: true,
   transform: true,
   forbidNonWhitelisted: true,
+  validateCustomDecorators: true,
   transformOptions: {
     enableImplicitConversion: true,
   },
