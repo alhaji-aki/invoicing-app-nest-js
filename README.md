@@ -8,7 +8,11 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 ### Features
 
-[ ] A user should be able to login, reset password, change password, update profile
+1. Login
+
+[ ] User should be able to reset their password using the forgot password route
+
+[ ] A user should be able to view their profile, change their password and update their profile
 
 [ ] A user can have companies that sends invoices and ones that receive invoices.
 

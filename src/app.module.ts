@@ -13,11 +13,13 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import mailConfig from './config/mail.config';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import authConfig from './config/auth.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [appConfig, databaseConfig, redisConfig, mailConfig],
+      load: [appConfig, databaseConfig, redisConfig, mailConfig, authConfig],
       isGlobal: true,
       expandVariables: true,
     }),
@@ -79,6 +81,7 @@ import { UserModule } from './user/user.module';
     CompanyModule,
     InvoiceModule,
     UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
