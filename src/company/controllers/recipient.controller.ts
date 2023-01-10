@@ -6,12 +6,14 @@ import {
   Post,
   Body,
   Param,
+  ValidationPipe,
 } from '@nestjs/common';
 import { RecipientService } from '../services/recipient.service';
 import { CreateRecipientDto } from '../dtos/create-recipient.dto';
 import { UpdateRecipientDto } from '../dtos/update-recipient.dto';
 
 import { ParamBody } from '../../common/decorators/param-body.decorator';
+import validationConfig from '../../config/validation.config';
 
 @Controller('companies/recipients')
 export class RecipientController {
@@ -44,7 +46,13 @@ export class RecipientController {
   @Patch(':recipient')
   async update(
     @Param('recipient') recipient: string,
-    @ParamBody() updateRecipientDto: UpdateRecipientDto,
+    @ParamBody(
+      new ValidationPipe({
+        validateCustomDecorators: true,
+        ...validationConfig,
+      }),
+    )
+    updateRecipientDto: UpdateRecipientDto,
   ) {
     return {
       message: 'Recipient updated successfully.',
