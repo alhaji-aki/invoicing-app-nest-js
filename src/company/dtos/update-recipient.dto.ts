@@ -12,6 +12,10 @@ export class UpdateRecipientDto extends PartialType(
 
   @IsOptional()
   @MaxLength(255)
-  @IsUnique(Recipient, 'name', 'recipient')
+  @IsUnique({
+    entity: Recipient,
+    // ignoreValue: (o) => o.recipient,
+    // ignoreColumn: 'uuid',
+  })
   name: string;
 }

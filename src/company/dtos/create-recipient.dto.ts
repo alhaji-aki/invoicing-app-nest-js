@@ -5,7 +5,7 @@ import { Recipient } from '../entities/recipient.entity';
 export class CreateRecipientDto {
   @IsNotEmpty()
   @MaxLength(255)
-  @IsUnique(Recipient)
+  @IsUnique({ entity: Recipient })
   name: string;
 
   @IsNotEmpty()

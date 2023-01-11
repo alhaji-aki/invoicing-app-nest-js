@@ -8,20 +8,38 @@ import {
 import { Injectable } from '@nestjs/common';
 import { DataSource, Not } from 'typeorm';
 
+export type UniqueValidatorOptions = {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  entity: Function;
+  column?: string;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  ignoreValue?: string | Function;
+  ignoreColumn?: string;
+};
+
 @ValidatorConstraint({ name: 'unique', async: true })
 @Injectable()
 export class UniqueValidator implements ValidatorConstraintInterface {
   constructor(private readonly dataSource: DataSource) {}
 
-  async validate(value: string, args: ValidationArguments) {
+  async validate(value: any, args: ValidationArguments) {
     if (!value) return false;
 
-    const [entity, field = args.property, ignore = null] = args.constraints;
+    const [
+      { entity, column = args.property, ignoreValue, ignoreColumn = 'id' },
+    ] = args.constraints;
 
-    const where =
-      ignore && args.object[ignore]
-        ? { [field]: value, uuid: Not(args.object[ignore]) }
-        : { [field]: value };
+    let where = { [column]: value };
+
+    if (typeof ignoreValue === 'string' || 'function') {
+      where = {
+        ...where,
+        // TODO: figure the ignoreValue function option  out
+        [ignoreColumn]: Not(
+          typeof ignoreValue === 'function' ? ignoreValue() : ignoreValue,
+        ),
+      };
+    }
 
     const result = await this.dataSource.getRepository(entity).exist({ where });
 
@@ -38,10 +56,7 @@ export class UniqueValidator implements ValidatorConstraintInterface {
 }
 
 export function IsUnique(
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  entity: Function,
-  field?: string,
-  ignore?: string,
+  options: UniqueValidatorOptions,
   validationOptions?: ValidationOptions,
 ): (object: any, propertyName: string) => void {
   return function (object: any, propertyName: string) {
@@ -51,7 +66,7 @@ export function IsUnique(
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
-      constraints: [entity, field, ignore],
+      constraints: [options],
       validator: UniqueValidator,
     });
   };

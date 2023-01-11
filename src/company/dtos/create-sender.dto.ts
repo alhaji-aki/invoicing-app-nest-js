@@ -11,7 +11,7 @@ import { Sender } from '../entities/sender.entity';
 export class CreateSenderDto {
   @IsNotEmpty()
   @MaxLength(255)
-  @IsUnique(Sender)
+  @IsUnique({ entity: Sender })
   name: string;
 
   @IsNotEmpty()
