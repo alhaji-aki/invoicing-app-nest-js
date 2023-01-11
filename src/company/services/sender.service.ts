@@ -53,7 +53,9 @@ export class SenderService {
       throw new BadRequestException('No data submitted to be updated.');
     }
 
-    return this.senderRepository.save({ ...senderEntity, ...updateSenderDto });
+    return this.senderRepository.save(
+      new Sender({ ...senderEntity, ...updateSenderDto }),
+    );
   }
 
   async delete(sender: string) {

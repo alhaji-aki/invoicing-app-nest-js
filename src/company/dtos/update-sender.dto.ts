@@ -14,8 +14,8 @@ export class UpdateSenderDto extends PartialType(
   @MaxLength(255)
   @IsUnique({
     entity: Sender,
-    // ignoreValue: (o) => o.sender,
-    // ignoreColumn: 'uuid',
+    ignoreValue: (o) => o.sender,
+    ignoreColumn: 'uuid',
   })
   name: string;
 }

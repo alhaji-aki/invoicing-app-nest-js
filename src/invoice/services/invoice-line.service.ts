@@ -90,10 +90,12 @@ export class InvoiceLineService {
         throw new BadRequestException('No data submitted to be updated.');
       }
 
-      const updatedInvoiceLine = await queryRunner.manager.save(InvoiceLine, {
-        ...invoiceLineEntity,
-        ...updateInvoiceLineDto,
-      });
+      const updatedInvoiceLine = await queryRunner.manager.save(
+        new InvoiceLine({
+          ...invoiceLineEntity,
+          ...updateInvoiceLineDto,
+        }),
+      );
 
       // update invoice amount if changed
       if (

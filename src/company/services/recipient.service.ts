@@ -53,10 +53,12 @@ export class RecipientService {
       throw new BadRequestException('No data submitted to be updated.');
     }
 
-    return this.recipientRepository.save({
-      ...recipientEntity,
-      ...updateRecipientDto,
-    });
+    return this.recipientRepository.save(
+      new Recipient({
+        ...recipientEntity,
+        ...updateRecipientDto,
+      }),
+    );
   }
 
   async delete(recipient: string) {
