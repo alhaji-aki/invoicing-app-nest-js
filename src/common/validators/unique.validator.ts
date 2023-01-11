@@ -34,7 +34,7 @@ export class UniqueValidator implements ValidatorConstraintInterface {
 
     let where = { [column]: value };
 
-    if (typeof ignoreValue === 'string' || 'function') {
+    if (typeof ignoreValue === 'string' || typeof ignoreValue === 'function') {
       where = {
         ...where,
         [ignoreColumn]: Not(
