@@ -25,18 +25,22 @@ export class UniqueValidator implements ValidatorConstraintInterface {
   async validate(value: any, args: ValidationArguments) {
     if (!value) return false;
 
-    const [
-      { entity, column = args.property, ignoreValue, ignoreColumn = 'id' },
-    ] = args.constraints;
+    const {
+      entity,
+      column = args.property,
+      ignoreValue,
+      ignoreColumn = 'id',
+    } = args.constraints[0];
 
     let where = { [column]: value };
 
     if (typeof ignoreValue === 'string' || 'function') {
       where = {
         ...where,
-        // TODO: figure the ignoreValue function option  out
         [ignoreColumn]: Not(
-          typeof ignoreValue === 'function' ? ignoreValue() : ignoreValue,
+          typeof ignoreValue === 'function'
+            ? ignoreValue(args.object)
+            : ignoreValue,
         ),
       };
     }
@@ -47,11 +51,11 @@ export class UniqueValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    let [entity] = args.constraints;
-    const field = args.constraints[1] || args.property;
+    const constraints: UniqueValidatorOptions = args.constraints[0];
 
-    entity = entity.name;
-    return `${entity} with the same '${field}' already exist`;
+    const column = constraints.column ?? args.property;
+
+    return `${constraints.entity.name} with the same '${column}' already exist`;
   }
 }
 

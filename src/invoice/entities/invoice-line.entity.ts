@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -14,7 +14,8 @@ import { Invoice } from './invoice.entity';
 @Entity('invoice_lines')
 export class InvoiceLine {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
+  @Expose({ toClassOnly: true })
   id: number;
 
   @Column({ unique: true })
@@ -28,7 +29,8 @@ export class InvoiceLine {
   amount: number;
 
   @Column({ name: 'invoice_id' })
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
+  @Expose({ toClassOnly: true })
   invoiceId: number;
 
   @ManyToOne(() => Invoice, (invoice) => invoice.invoiceLines, {

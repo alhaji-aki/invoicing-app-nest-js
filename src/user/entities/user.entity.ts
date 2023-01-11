@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -11,7 +11,8 @@ import {
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
+  @Expose({ toClassOnly: true })
   id: number;
 
   @Column({ unique: true })
@@ -25,7 +26,8 @@ export class User {
   email: string;
 
   @Column()
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
+  @Expose({ toClassOnly: true })
   password: string;
 
   @Column({ name: 'is_admin', type: 'boolean', default: false })

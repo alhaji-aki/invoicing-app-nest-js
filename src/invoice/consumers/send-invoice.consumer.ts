@@ -73,6 +73,6 @@ export class SendInvoiceConsumer {
 
   @OnQueueFailed()
   onFailed(job: Job, err: Error) {
-    console.log(err);
+    console.error(err);
   }
 }

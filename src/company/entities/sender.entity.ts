@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { Invoice } from '../../invoice/entities/invoice.entity';
 import {
   Entity,
@@ -15,7 +15,8 @@ import {
 @Entity('company_senders')
 export class Sender {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
+  @Expose({ toClassOnly: true })
   id: number;
 
   @Column({ unique: true })

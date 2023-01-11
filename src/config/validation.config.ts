@@ -1,7 +1,8 @@
-export default {
+import { ValidationPipeOptions } from '@nestjs/common';
+
+export const generalValidationOptions: ValidationPipeOptions = {
   whitelist: true,
   transform: true,
-  forbidNonWhitelisted: true,
   transformOptions: {
     enableImplicitConversion: true,
   },
@@ -13,4 +14,14 @@ export default {
   //   });
   //   return new ValidationException(errMsg);
   // },
+};
+
+export const customDecoratorsValidationOptions: ValidationPipeOptions = {
+  whitelist: true,
+  transform: true,
+  validateCustomDecorators: true,
+  transformOptions: {
+    enableImplicitConversion: true,
+    strategy: 'exposeAll',
+  },
 };

@@ -12,7 +12,7 @@ import { SenderService } from '../services/sender.service';
 import { CreateSenderDto } from '../dtos/create-sender.dto';
 import { UpdateSenderDto } from '../dtos/update-sender.dto';
 import { ParamBody } from '../../common/decorators/param-body.decorator';
-import validationConfig from '../../config/validation.config';
+import { customDecoratorsValidationOptions } from '../../config/validation.config';
 
 @Controller('companies/senders')
 export class SenderController {
@@ -45,12 +45,7 @@ export class SenderController {
   @Patch(':sender')
   async update(
     @Param('sender') sender: string,
-    @ParamBody(
-      new ValidationPipe({
-        validateCustomDecorators: true,
-        ...validationConfig,
-      }),
-    )
+    @ParamBody(new ValidationPipe(customDecoratorsValidationOptions))
     updateSenderDto: UpdateSenderDto,
   ) {
     return {
