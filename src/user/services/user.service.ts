@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -19,7 +23,11 @@ export class UserService {
       where: { uuid: user },
     });
 
-    if (!userEntity || userEntity.id === authUser.id) {
+    if (!userEntity) {
+      throw new NotFoundException('User not found.');
+    }
+
+    if (userEntity.id === authUser.id) {
       throw new ForbiddenException('You cannot change your own admin state.');
     }
 

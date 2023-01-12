@@ -8,49 +8,52 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 ### Features
 
-1. Login
+#### Authentication
 
-2. A user should be able to view their profile, change their password and update their profile
+    1. Login
+    2. Request password reset
+    3. Reset password
 
-3. User should be able to reset their password using the forgot password route
+#### Profile Management
 
-4. A user can have companies that sends invoices and ones that receive invoices.
+    1. View profile
+    2. Update profile
+    3. Change Password
 
-5. A user can get all their invoices
+#### User Management (Admins Only)
 
-6. A user can create invoices.
+    1. View all users
+    2. Change user admin state
 
-7. A user can view an invoice
+#### Invites Management (Admins Only)
 
-8. A user can send an invoice
+    1. View all invites
+    2. Send invites
+    3. Resend invites
+    4. Revoke invites
+    5. Accepting invites (Registeration)
 
-9. The email is sent to the contact email and if there are any carbon copy emails they will be copied
+#### Invoice Management
 
-10. A user can generate invoice pdf
+    1. View all invoices
+    2. Create Invoice
+    3. View invoice
+    4. Update invoice
+    5. Delete invoice
+    6. Add invoice lines
+    7. Update invoice line
+    8. Delete invoice line
+    9. Send invoice to email
+    10. Download invoice pdf
+    11. Mark invoice as paid
 
-11. A user can delete an invoice
+#### Companies Management (Both Senders and Recipients)
 
-12. A user can mark an invoice as paid
-
-13. A user can update their invoices by adding more invoice lines or removing invoice lines or updating old invoice lines
-
-14. user can see all their companies (sender and recipient)
-
-15. admin user can view all users
-
-16. admin user can change another user's admin state
-
-[ ] Users marked as admins can invite other users to use the platform
-
-[ ] Inviting a user sends an email to the user
-
-[ ] admin can revoke an invite that is not claimed or not expired
-
-[ ] admin can resend invites even if it has expired
-
-[ ] user can accept a pending invite that is not expired or revoked
-
-[ ] admin user can view all invites
+    1. View all companies
+    2. Create companies
+    3. View company
+    4. Update company
+    5. Delete company
 
 ### Model/DB Structure
 
@@ -68,32 +71,32 @@ Invites - email, token, expires_at, accepted_at timestamps
 
 ## Installation
 
-```bash
-npm install
-```
+    ```bash
+    npm install
+    ```
 
 ## Running the app
 
-```bash
-# development
-$ npm run start
+    ```bash
+    # development
+    $ npm run start
 
-# watch mode
-$ npm run start:dev
+    # watch mode
+    $ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
+    # production mode
+    $ npm run start:prod
+    ```
 
 ## Test
 
-```bash
-# unit tests
-$ npm run test
+    ```bash
+    # unit tests
+    $ npm run test
 
-# e2e tests
-$ npm run test:e2e
+    # e2e tests
+    $ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
-```
+    # test coverage
+    $ npm run test:cov
+    ```

@@ -22,7 +22,7 @@ export class ExistsValidator implements ValidatorConstraintInterface {
   constructor(private readonly dataSource: DataSource) {}
 
   async validate(value: string, args: ValidationArguments) {
-    if (!value) return false;
+    if (!value) return true;
 
     const {
       entity,

@@ -15,10 +15,12 @@ import { PasswordService } from './services/password.service';
 import { PasswordReset } from './entities/password-reset.entity';
 import { BullModule } from '@nestjs/bull';
 import { PasswordResetConsumer } from './consumers/password-reset.consumer';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, PasswordReset]),
+    UserModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
