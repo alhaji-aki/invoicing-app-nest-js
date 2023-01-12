@@ -34,6 +34,10 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 13. A user can update their invoices by adding more invoice lines or removing invoice lines or updating old invoice lines
 
+14. user can see all their companies (sender and recipient)
+
+[ ] admin user can view all users
+
 [ ] Users marked as admins can invite other users to use the platform
 
 [ ] Inviting a user sends an email to the user
@@ -44,11 +48,7 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 [ ] user can accept a pending invite that is not expired or revoked
 
-[ ] admin user can view all users
-
 [ ] admin user can view all invites
-
-[ ] user can see all their companies (sender and recipient)
 
 ### Model/DB Structure
 
