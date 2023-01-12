@@ -10,10 +10,15 @@ import { ProfileController } from './controllers/profile.controller';
 import { ProfileService } from './services/profile.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
+import { PasswordController } from './controllers/password.controller';
+import { PasswordService } from './services/password.service';
+import { PasswordReset } from './entities/password-reset.entity';
+import { BullModule } from '@nestjs/bull';
+import { PasswordResetConsumer } from './consumers/password-reset.consumer';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, PasswordReset]),
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -23,9 +28,19 @@ import { User } from '../user/entities/user.entity';
         signOptions: { expiresIn: configService.get('auth.expiresIn') },
       }),
     }),
+    BullModule.registerQueue({
+      name: 'auth',
+    }),
   ],
-  providers: [AuthService, ProfileService, LocalStrategy, JwtStrategy],
-  controllers: [AuthController, ProfileController],
+  providers: [
+    AuthService,
+    PasswordService,
+    ProfileService,
+    LocalStrategy,
+    JwtStrategy,
+    PasswordResetConsumer,
+  ],
+  controllers: [AuthController, PasswordController, ProfileController],
   exports: [AuthService],
 })
 export class AuthModule {}
