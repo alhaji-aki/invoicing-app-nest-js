@@ -9,6 +9,7 @@ import { DataSource, Repository } from 'typeorm';
 import { InvoiceLine } from '../entities/invoice-line.entity';
 import { CreateInvoiceLineDto } from '../dto/create-invoice-line.dto';
 import { UpdateInvoiceLineDto } from '../dto/update-invoice-line.dto';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class InvoiceLineService {
@@ -20,7 +21,11 @@ export class InvoiceLineService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async store(invoice: string, createInvoiceLineDto: CreateInvoiceLineDto) {
+  async store(
+    user: User,
+    invoice: string,
+    createInvoiceLineDto: CreateInvoiceLineDto,
+  ) {
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -31,7 +36,7 @@ export class InvoiceLineService {
         where: { uuid: invoice },
       });
 
-      if (!invoiceEntity) {
+      if (!invoiceEntity || invoiceEntity.userId !== user.id) {
         throw new NotFoundException('Invoice not found.');
       }
 
@@ -59,6 +64,7 @@ export class InvoiceLineService {
   }
 
   async update(
+    user: User,
     invoice: string,
     invoiceLine: string,
     updateInvoiceLineDto: UpdateInvoiceLineDto,
@@ -73,7 +79,7 @@ export class InvoiceLineService {
         uuid: invoice,
       });
 
-      if (!invoiceEntity) {
+      if (!invoiceEntity || invoiceEntity.userId !== user.id) {
         throw new NotFoundException('Invoice not found.');
       }
 
@@ -122,7 +128,7 @@ export class InvoiceLineService {
     }
   }
 
-  async delete(invoice: string, invoiceLine: string) {
+  async delete(user: User, invoice: string, invoiceLine: string) {
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -133,7 +139,7 @@ export class InvoiceLineService {
         uuid: invoice,
       });
 
-      if (!invoiceEntity) {
+      if (!invoiceEntity || invoiceEntity.userId !== user.id) {
         throw new NotFoundException('Invoice not found.');
       }
 

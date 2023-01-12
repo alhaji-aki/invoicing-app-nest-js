@@ -8,6 +8,14 @@ import {
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
+export type ExistsValidatorOptions = {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  entity: Function;
+  column?: string;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  extraConditions?: Function;
+};
+
 @ValidatorConstraint({ name: 'exists', async: true })
 @Injectable()
 export class ExistsValidator implements ValidatorConstraintInterface {
@@ -16,25 +24,33 @@ export class ExistsValidator implements ValidatorConstraintInterface {
   async validate(value: string, args: ValidationArguments) {
     if (!value) return false;
 
-    const [entity, field = args.property] = args.constraints;
+    const {
+      entity,
+      column = args.property,
+      extraConditions,
+    } = args.constraints[0];
 
-    const where = { [field]: value };
+    let where = { [column]: value };
+
+    if (extraConditions) {
+      where = {
+        ...where,
+        ...extraConditions(args.object),
+      };
+    }
 
     return await this.dataSource.getRepository(entity).exist({ where });
   }
 
   defaultMessage(args: ValidationArguments) {
-    let [entity] = args.constraints;
+    const constraints: ExistsValidatorOptions = args.constraints[0];
 
-    entity = entity.name;
-    return `${entity} selected does not exist.`;
+    return `${constraints.entity.name} selected does not exist`;
   }
 }
 
 export function IsExists(
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  entity: Function,
-  field?: string,
+  options: ExistsValidatorOptions,
   validationOptions?: ValidationOptions,
 ): (object: any, propertyName: string) => void {
   return function (object: any, propertyName: string) {
@@ -44,7 +60,7 @@ export function IsExists(
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
-      constraints: [entity, field],
+      constraints: [options],
       validator: ExistsValidator,
     });
   };

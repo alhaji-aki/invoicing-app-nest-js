@@ -21,6 +21,7 @@ import { join } from 'path';
 import puppeteer from 'puppeteer';
 import * as Handlebars from 'handlebars';
 import * as moment from 'moment';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class InvoiceService {
@@ -35,13 +36,14 @@ export class InvoiceService {
     @InjectQueue('invoices') private readonly queue: Queue,
   ) {}
 
-  async index() {
+  async index(user: User) {
     return await this.invoiceRepository.find({
+      where: { userId: user.id },
       relations: ['sender', 'recipient'],
     });
   }
 
-  async store(createInvoiceDto: CreateInvoiceDto) {
+  async store(user: User, createInvoiceDto: CreateInvoiceDto) {
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -49,11 +51,11 @@ export class InvoiceService {
 
     try {
       const sender = await this.senderRepository.findOne({
-        where: { uuid: createInvoiceDto.sender },
+        where: { uuid: createInvoiceDto.sender, userId: user.id },
       });
 
       const recipient = await this.recipientRepository.findOne({
-        where: { uuid: createInvoiceDto.recipient },
+        where: { uuid: createInvoiceDto.recipient, userId: user.id },
       });
 
       const amount = createInvoiceDto.invoiceLines.reduce(
@@ -64,6 +66,7 @@ export class InvoiceService {
       const invoice = queryRunner.manager.create(Invoice, {
         ...createInvoiceDto,
         invoiceNo: await this.generateInvoiceNo(),
+        userId: user.id,
         amount,
         sender,
         recipient,
@@ -88,27 +91,34 @@ export class InvoiceService {
     }
   }
 
-  async show(invoice: string) {
+  async show(user: User, invoice: string) {
     const invoiceEntity = await this.invoiceRepository.findOne({
       where: { uuid: invoice },
       relations: ['sender', 'recipient', 'invoiceLines'],
     });
 
-    if (!invoiceEntity) {
+    if (!invoiceEntity || invoiceEntity.userId !== user.id) {
       throw new NotFoundException('Invoice not found.');
     }
 
     return invoiceEntity;
   }
 
-  async update(invoice: string, updateInvoiceDto: UpdateInvoiceDto) {
+  async update(
+    user: User,
+    invoice: string,
+    updateInvoiceDto: UpdateInvoiceDto,
+  ) {
     const invoiceEntity = await this.invoiceRepository.findOneBy({
       uuid: invoice,
     });
 
-    if (!invoiceEntity) {
+    if (!invoiceEntity || invoiceEntity.userId !== user.id) {
       throw new NotFoundException('Invoice not found.');
     }
+
+    delete updateInvoiceDto.authUser;
+    delete updateInvoiceDto.entity;
 
     if (Object.keys(updateInvoiceDto).length === 0) {
       throw new BadRequestException('No data submitted to be updated.');
@@ -117,41 +127,43 @@ export class InvoiceService {
     const sender =
       updateInvoiceDto.sender &&
       (await this.senderRepository.findOne({
-        where: { uuid: updateInvoiceDto.sender },
+        where: { uuid: updateInvoiceDto.sender, userId: user.id },
       }));
 
     const recipient =
       updateInvoiceDto.recipient &&
       (await this.recipientRepository.findOne({
-        where: { uuid: updateInvoiceDto.recipient },
+        where: { uuid: updateInvoiceDto.recipient, userId: user.id },
       }));
 
-    return this.invoiceRepository.save({
-      ...invoiceEntity,
-      ...updateInvoiceDto,
-      sender,
-      recipient,
-    });
+    return this.invoiceRepository.save(
+      new Invoice({
+        ...invoiceEntity,
+        ...updateInvoiceDto,
+        sender,
+        recipient,
+      }),
+    );
   }
 
-  async delete(invoice: string) {
+  async delete(user: User, invoice: string) {
     const invoiceEntity = await this.invoiceRepository.findOneBy({
       uuid: invoice,
     });
 
-    if (!invoiceEntity) {
+    if (!invoiceEntity || invoiceEntity.userId !== user.id) {
       throw new NotFoundException('Invoice not found.');
     }
 
     return await this.invoiceRepository.remove(invoiceEntity);
   }
 
-  async send(invoice: string) {
+  async send(user: User, invoice: string) {
     const invoiceEntity = await this.invoiceRepository.findOne({
       where: { uuid: invoice },
     });
 
-    if (!invoiceEntity) {
+    if (!invoiceEntity || invoiceEntity.userId !== user.id) {
       throw new NotFoundException('Invoice not found.');
     }
 
@@ -160,12 +172,12 @@ export class InvoiceService {
     });
   }
 
-  async markAsPaid(invoice: string, markAsPaidDto: MarkAsPaidDto) {
+  async markAsPaid(user: User, invoice: string, markAsPaidDto: MarkAsPaidDto) {
     const invoiceEntity = await this.invoiceRepository.findOne({
       where: { uuid: invoice },
     });
 
-    if (!invoiceEntity) {
+    if (!invoiceEntity || invoiceEntity.userId !== user.id) {
       throw new NotFoundException('Invoice not found.');
     }
 
@@ -178,13 +190,13 @@ export class InvoiceService {
     return await this.invoiceRepository.save(invoiceEntity);
   }
 
-  async downloadPDF(invoice: string) {
+  async downloadPDF(user: User, invoice: string) {
     const invoiceEntity = await this.invoiceRepository.findOne({
       where: { uuid: invoice },
       relations: ['sender', 'recipient', 'invoiceLines'],
     });
 
-    if (!invoiceEntity) {
+    if (!invoiceEntity || invoiceEntity.userId !== user.id) {
       throw new NotFoundException('Invoice not found.');
     }
 
@@ -225,12 +237,12 @@ export class InvoiceService {
     return buffer;
   }
 
-  private async generateInvoiceNo(): Promise<string> {
+  private async generateInvoiceNo() {
     const number = randomInt(10000000, 99999999);
     const invoiceNo = `INV-${number}`;
 
     while (await this.invoiceRepository.exist({ where: { invoiceNo } })) {
-      this.generateInvoiceNo();
+      await this.generateInvoiceNo();
     }
 
     return invoiceNo;

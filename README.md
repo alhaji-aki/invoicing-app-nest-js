@@ -16,23 +16,23 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 4. A user can have companies that sends invoices and ones that receive invoices.
 
-[ ] A user can get all their invoices
+5. A user can get all their invoices
 
-[ ] A user can create invoices.
+6. A user can create invoices.
 
-[ ] A user can view an invoice
+7. A user can view an invoice
 
-[ ] A user can send an invoice
+8. A user can send an invoice
 
-[ ] The email is sent to the contact email and if there are any carbon copy emails they will be copied
+9. The email is sent to the contact email and if there are any carbon copy emails they will be copied
 
-[ ] A user can generate invoice pdf
+10. A user can generate invoice pdf
 
-[ ] A user can update their invoices by adding more invoice lines or removing invoice lines or updating old invoice lines
+11. A user can delete an invoice
 
-[ ] A user can delete an invoice
+12. A user can mark an invoice as paid
 
-[ ] A user can mark an invoice as paid
+13. A user can update their invoices by adding more invoice lines or removing invoice lines or updating old invoice lines
 
 [ ] Users marked as admins can invite other users to use the platform
 

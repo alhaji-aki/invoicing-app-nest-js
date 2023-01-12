@@ -21,7 +21,7 @@ export class SendInvoiceConsumer {
   async process(job: Job<unknown>) {
     const invoice = await this.invoiceRepository.findOne({
       where: { id: job.data['invoice'] },
-      relations: ['sender', 'recipient', 'invoiceLines'],
+      relations: ['sender', 'recipient', 'invoiceLines', 'user'],
     });
 
     if (!invoice) {
@@ -49,7 +49,7 @@ export class SendInvoiceConsumer {
           title: invoice.title,
           description: invoice.description,
           sender: invoice.recipient.name,
-          user: 'User', // TODO: replace this with the user's name
+          user: invoice.user.name,
         },
         attachments: [
           {

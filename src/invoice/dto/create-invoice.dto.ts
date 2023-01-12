@@ -11,8 +11,9 @@ import { Sender } from '../../company/entities/sender.entity';
 import { Recipient } from '../../company/entities/recipient.entity';
 import { CreateInvoiceLineDto } from './create-invoice-line.dto';
 import { Type } from 'class-transformer';
+import { BaseDto } from 'src/common/dto/base.dto';
 
-export class CreateInvoiceDto {
+export class CreateInvoiceDto extends BaseDto {
   @IsNotEmpty()
   @MaxLength(255)
   title: string;
@@ -23,12 +24,20 @@ export class CreateInvoiceDto {
 
   @IsNotEmpty()
   @IsUUID('4')
-  @IsExists(Sender, 'uuid')
+  @IsExists({
+    entity: Sender,
+    column: 'uuid',
+    extraConditions: (o: CreateInvoiceDto) => ({ userId: o.authUser.id }),
+  })
   sender: string;
 
   @IsNotEmpty()
   @IsUUID('4')
-  @IsExists(Recipient, 'uuid')
+  @IsExists({
+    entity: Recipient,
+    column: 'uuid',
+    extraConditions: (o: CreateInvoiceDto) => ({ userId: o.authUser.id }),
+  })
   recipient: string;
 
   @IsArray()

@@ -1,6 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { Recipient } from 'src/company/entities/recipient.entity';
 import { Sender } from 'src/company/entities/sender.entity';
+import { Invoice } from 'src/invoice/entities/invoice.entity';
 import {
   Column,
   CreateDateColumn,
@@ -41,6 +42,9 @@ export class User {
 
   @OneToMany(() => Recipient, (recipient) => recipient.user)
   recipients: Recipient[];
+
+  @OneToMany(() => Invoice, (invoice) => invoice.user)
+  invoices: Recipient[];
 
   @CreateDateColumn({
     type: 'timestamp',

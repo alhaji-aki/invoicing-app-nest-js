@@ -13,6 +13,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { InvoiceLine } from './invoice-line.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Entity('invoices')
 export class Invoice {
@@ -33,6 +34,18 @@ export class Invoice {
 
   @Column()
   description: string;
+
+  @Column({ name: 'user_id', nullable: true })
+  @Exclude({ toPlainOnly: true })
+  @Expose({ toClassOnly: true })
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.invoices, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column({ name: 'sender_id', nullable: true })
   @Exclude({ toPlainOnly: true })
