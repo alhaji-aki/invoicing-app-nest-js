@@ -10,7 +10,11 @@ import {
   BeforeUpdate,
   Generated,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
+  Index,
 } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
 
 @Entity('company_senders')
 export class Sender {
@@ -23,7 +27,8 @@ export class Sender {
   @Generated('uuid')
   uuid: string;
 
-  @Column({ unique: true })
+  @Column()
+  @Index()
   name: string;
 
   @Column()
@@ -43,6 +48,18 @@ export class Sender {
 
   @OneToMany(() => Invoice, (invoice) => invoice.sender)
   invoices: Invoice[];
+
+  @Column({ name: 'user_id', nullable: true })
+  @Exclude({ toPlainOnly: true })
+  @Expose({ toClassOnly: true })
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.senders, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @CreateDateColumn({
     type: 'timestamp',

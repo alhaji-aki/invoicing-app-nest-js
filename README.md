@@ -14,7 +14,7 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 3. User should be able to reset their password using the forgot password route
 
-[ ] A user can have companies that sends invoices and ones that receive invoices.
+4. A user can have companies that sends invoices and ones that receive invoices.
 
 [ ] A user can get all their invoices
 

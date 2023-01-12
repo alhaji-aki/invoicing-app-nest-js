@@ -8,7 +8,11 @@ import {
   UpdateDateColumn,
   Generated,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
+  Index,
 } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
 
 @Entity('company_recipients')
 export class Recipient {
@@ -21,7 +25,8 @@ export class Recipient {
   @Generated('uuid')
   uuid: string;
 
-  @Column({ unique: true })
+  @Column()
+  @Index()
   name: string;
 
   @Column({ type: 'text' })
@@ -44,6 +49,18 @@ export class Recipient {
 
   @Column({ name: 'cc_emails', type: 'json' })
   ccEmails: string[];
+
+  @Column({ name: 'user_id', nullable: true })
+  @Exclude({ toPlainOnly: true })
+  @Expose({ toClassOnly: true })
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.recipients, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @OneToMany(() => Invoice, (invoice) => invoice.recipient)
   invoices: Invoice[];

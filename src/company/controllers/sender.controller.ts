@@ -4,61 +4,70 @@ import {
   Get,
   Patch,
   Post,
-  Body,
   Param,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { SenderService } from '../services/sender.service';
 import { CreateSenderDto } from '../dtos/create-sender.dto';
 import { UpdateSenderDto } from '../dtos/update-sender.dto';
-import { ParamBody } from '../../common/decorators/param-body.decorator';
 import { customDecoratorsValidationOptions } from '../../config/validation.config';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { User } from 'src/user/entities/user.entity';
+import { CustomBody } from 'src/common/decorators/custom-body.decorator';
 
 @Controller('companies/senders')
+@UseGuards(JwtAuthGuard)
 export class SenderController {
   constructor(private readonly senderService: SenderService) {}
 
   @Get()
-  async index() {
+  async index(@CurrentUser() user: User) {
     return {
       message: 'Get senders.',
-      data: await this.senderService.index(),
+      data: await this.senderService.index(user),
     };
   }
 
   @Post()
-  async store(@Body() createSenderDto: CreateSenderDto) {
+  async store(
+    @CurrentUser() user: User,
+    @CustomBody(new ValidationPipe(customDecoratorsValidationOptions))
+    createSenderDto: CreateSenderDto,
+  ) {
     return {
       message: 'Sender created successfully.',
-      data: await this.senderService.store(createSenderDto),
+      data: await this.senderService.store(user, createSenderDto),
     };
   }
 
   @Get(':sender')
-  async show(@Param('sender') sender: string) {
+  async show(@CurrentUser() user: User, @Param('sender') sender: string) {
     return {
       message: 'Get sender.',
-      data: await this.senderService.show(sender),
+      data: await this.senderService.show(user, sender),
     };
   }
 
   @Patch(':sender')
   async update(
+    @CurrentUser() user: User,
     @Param('sender') sender: string,
-    @ParamBody(new ValidationPipe(customDecoratorsValidationOptions))
+    @CustomBody('sender', new ValidationPipe(customDecoratorsValidationOptions))
     updateSenderDto: UpdateSenderDto,
   ) {
     return {
       message: 'Sender updated successfully.',
-      data: await this.senderService.update(sender, updateSenderDto),
+      data: await this.senderService.update(user, sender, updateSenderDto),
     };
   }
 
   @Delete(':sender')
-  async delete(@Param('sender') sender: string) {
+  async delete(@CurrentUser() user: User, @Param('sender') sender: string) {
     return {
       message: 'Sender deleted successfully.',
-      data: await this.senderService.delete(sender),
+      data: await this.senderService.delete(user, sender),
     };
   }
 }

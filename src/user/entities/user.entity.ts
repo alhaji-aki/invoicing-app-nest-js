@@ -1,9 +1,12 @@
 import { Exclude, Expose } from 'class-transformer';
+import { Recipient } from 'src/company/entities/recipient.entity';
+import { Sender } from 'src/company/entities/sender.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   Generated,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -32,6 +35,12 @@ export class User {
 
   @Column({ name: 'is_admin', type: 'boolean', default: false })
   isAdmin: boolean;
+
+  @OneToMany(() => Sender, (sender) => sender.user)
+  senders: Sender[];
+
+  @OneToMany(() => Recipient, (recipient) => recipient.user)
+  recipients: Recipient[];
 
   @CreateDateColumn({
     type: 'timestamp',

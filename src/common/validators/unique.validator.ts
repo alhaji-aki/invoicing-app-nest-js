@@ -15,6 +15,8 @@ export type UniqueValidatorOptions = {
   // eslint-disable-next-line @typescript-eslint/ban-types
   ignoreValue?: string | Function;
   ignoreColumn?: string;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  extraConditions?: Function;
 };
 
 @ValidatorConstraint({ name: 'unique', async: true })
@@ -30,9 +32,17 @@ export class UniqueValidator implements ValidatorConstraintInterface {
       column = args.property,
       ignoreValue,
       ignoreColumn = 'id',
+      extraConditions,
     } = args.constraints[0];
 
     let where = { [column]: value };
+
+    if (extraConditions) {
+      where = {
+        ...where,
+        ...extraConditions(args.object),
+      };
+    }
 
     if (typeof ignoreValue === 'string' || typeof ignoreValue === 'function') {
       where = {

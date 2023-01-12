@@ -8,6 +8,7 @@ import { UpdateSenderDto } from '../dtos/update-sender.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Sender } from '../entities/sender.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class SenderService {
@@ -16,38 +17,44 @@ export class SenderService {
     private readonly senderRepository: Repository<Sender>,
   ) {}
 
-  async index() {
-    return await this.senderRepository.find();
+  async index(user: User) {
+    return await this.senderRepository.find({
+      where: { userId: user.id },
+    });
   }
 
-  async store(createSenderDto: CreateSenderDto) {
-    const sender = this.senderRepository.create(createSenderDto);
+  async store(user: User, createSenderDto: CreateSenderDto) {
+    const sender = this.senderRepository.create({
+      ...createSenderDto,
+      userId: user.id,
+    });
 
     return await this.senderRepository.save(sender);
   }
 
-  async show(sender: string) {
+  async show(user: User, sender: string) {
     const senderEntity = await this.senderRepository.findOneBy({
       uuid: sender,
     });
 
-    if (!senderEntity) {
+    if (!senderEntity || senderEntity.userId !== user.id) {
       throw new NotFoundException('Sender not found.');
     }
 
     return senderEntity;
   }
 
-  async update(sender: string, updateSenderDto: UpdateSenderDto) {
+  async update(user: User, sender: string, updateSenderDto: UpdateSenderDto) {
     const senderEntity = await this.senderRepository.findOneBy({
       uuid: sender,
     });
 
-    if (!senderEntity) {
+    if (!senderEntity || senderEntity.userId !== user.id) {
       throw new NotFoundException('Sender not found.');
     }
 
-    delete updateSenderDto['sender'];
+    delete updateSenderDto['entity'];
+    delete updateSenderDto['authUser'];
 
     if (Object.keys(updateSenderDto).length === 0) {
       throw new BadRequestException('No data submitted to be updated.');
@@ -58,12 +65,12 @@ export class SenderService {
     );
   }
 
-  async delete(sender: string) {
+  async delete(user: User, sender: string) {
     const senderEntity = await this.senderRepository.findOneBy({
       uuid: sender,
     });
 
-    if (!senderEntity) {
+    if (!senderEntity || senderEntity.userId !== user.id) {
       throw new NotFoundException('Sender not found.');
     }
 

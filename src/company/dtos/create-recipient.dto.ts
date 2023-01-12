@@ -1,11 +1,15 @@
 import { IsNotEmpty, IsOptional, MaxLength, IsEmail } from 'class-validator';
 import { IsUnique } from '../../common/validators/unique.validator';
 import { Recipient } from '../entities/recipient.entity';
+import { BaseDto } from 'src/common/dto/base.dto';
 
-export class CreateRecipientDto {
+export class CreateRecipientDto extends BaseDto {
   @IsNotEmpty()
   @MaxLength(255)
-  @IsUnique({ entity: Recipient })
+  @IsUnique({
+    entity: Recipient,
+    extraConditions: (o: CreateRecipientDto) => ({ userId: o.authUser.id }),
+  })
   name: string;
 
   @IsNotEmpty()
