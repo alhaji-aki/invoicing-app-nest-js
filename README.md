@@ -36,13 +36,15 @@ My Invoicing application API built with NestJs and Typescript. After watching a 
 
 14. user can see all their companies (sender and recipient)
 
-[ ] admin user can view all users
+15. admin user can view all users
+
+16. admin user can change another user's admin state
 
 [ ] Users marked as admins can invite other users to use the platform
 
 [ ] Inviting a user sends an email to the user
 
-[ ] admin can invoke an invite that is not claimed or not expired
+[ ] admin can revoke an invite that is not claimed or not expired
 
 [ ] admin can resend invites even if it has expired
 
